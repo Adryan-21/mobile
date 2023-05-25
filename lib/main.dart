@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/login.dart';
-import 'package:mobile/dashboard.dart';
+import 'pages/home_page.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MemoGame());
 
-class MyApp extends StatelessWidget {
+class MemoGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
+      title: 'Memo Game',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(),
-      routes: {
-        '/dashboard': (context) => Dashboard(),
-      },
+      home: HomePage(),
     );
   }
 }
