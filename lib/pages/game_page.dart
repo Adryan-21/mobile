@@ -7,7 +7,11 @@ class GamePage extends StatefulWidget {
   _GamePageState createState() => _GamePageState();
 }
 
-class _GamePageState extends State<GamePage> {
+class _GamePageState extends State<GamePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _animationController;
+  Map<int, Animation<double>> _flippedAnimations = {};
+
   int totalTime = 60; // Czas gry w sekundach
   bool isGameFinished = false;
 
@@ -21,11 +25,17 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration:
+          Duration(milliseconds: 500), // Dostosuj czas trwania według potrzeb
+    );
     startGame();
   }
 
   @override
   void dispose() {
+    _animationController?.dispose();
     gameTimer?.cancel();
     super.dispose();
   }
@@ -122,7 +132,7 @@ class _GamePageState extends State<GamePage> {
       } else {
         // Elementy nie są takie same
         blockInput = true; // Zablokuj kliknięcia
-        Future.delayed(Duration(seconds: 1), () {
+        _animationController?.forward(from: 0.0).then((_) {
           setState(() {
             itemVisibility[firstSelectedItem!] = true;
             itemVisibility[secondSelectedItem!] = true;
@@ -134,6 +144,8 @@ class _GamePageState extends State<GamePage> {
               secondSelectedItem = null;
             });
           });
+          _animationController
+              ?.reverse(); // Przywróć kartę do pierwotnego położenia
         });
       }
     } else {
@@ -144,6 +156,61 @@ class _GamePageState extends State<GamePage> {
         itemVisibility = List<bool>.from(itemVisibility);
       });
     }
+  }
+
+  Widget buildCard(int index) {
+    if (!_flippedAnimations.containsKey(index)) {
+      _flippedAnimations[index] = Tween(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(
+          parent: _animationController!,
+          curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+        ),
+      );
+    }
+
+    return GestureDetector(
+      onTap: () {
+        if (blockInput) {
+          return;
+        }
+        if (itemVisibility[index] &&
+            firstSelectedItem != index &&
+            secondSelectedItem != index) {
+          setState(() {
+            itemVisibility[index] = false;
+          });
+          checkSelectedItems(index);
+        }
+      },
+      child: AnimatedBuilder(
+        animation: _flippedAnimations[index]!,
+        builder: (context, child) {
+          double rotationValue = itemVisibility[index]
+              ? _flippedAnimations[index]!.value * pi
+              : (_flippedAnimations[index]!.value + 1) * pi;
+          return Transform.rotate(
+            angle: rotationValue,
+            child: child,
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: itemVisibility[index] ? Color(0xFF1AE5BE) : Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Center(
+            child: Visibility(
+              visible: !itemVisibility[index],
+              child: Text(
+                '${shuffledItems[index]}',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -180,39 +247,7 @@ class _GamePageState extends State<GamePage> {
                 ),
                 itemCount: shuffledItems.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (blockInput) {
-                        return;
-                      }
-                      if (itemVisibility[index] &&
-                          firstSelectedItem != index &&
-                          secondSelectedItem != index) {
-                        setState(() {
-                          itemVisibility[index] = false;
-                        });
-                        checkSelectedItems(index);
-                      }
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        color: itemVisibility[index]
-                            ? Color(0xFF1AE5BE)
-                            : Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Visibility(
-                          visible: !itemVisibility[index],
-                          child: Text(
-                            '${shuffledItems[index]}',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+                  return buildCard(index);
                 },
               ),
             ],
