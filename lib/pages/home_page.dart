@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
 import 'game_page.dart';
 import 'settings_page.dart';
+import 'rank_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  Color _backgroundColor = Color.fromARGB(255, 255, 255, 255); // Domyślny kolor tła
+
+  void _changeBackgroundColor() {
+    setState(() {
+      if (_backgroundColor == Color.fromARGB(255, 255, 255, 255)) {
+        _backgroundColor = Colors.grey[700]!; // Zmienia na ciemny szary
+      } else {
+        _backgroundColor = Color.fromARGB(255, 255, 255, 255); // Zmienia na jasny
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,16 +28,7 @@ class HomePage extends StatelessWidget {
         title: Text('Memo Game'),
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(255, 255, 255, 255),
-              Color.fromARGB(255, 203, 243, 255),
-            ],
-          ),
-        ),
+        color: _backgroundColor, // Używa aktualnego koloru tła
         child: Align(
           alignment: Alignment.topCenter,
           child: Column(
@@ -59,6 +68,27 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
+                    MaterialPageRoute(builder: (context) => RankingPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  primary: Color(0xFF1ae5be),
+                  elevation: 5,
+                ),
+                child: Text(
+                  'Ranking',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(builder: (context) => SettingsPage()),
                   );
                 },
@@ -72,6 +102,22 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Text(
                   'Ustawienia',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _changeBackgroundColor,
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  primary: Color(0xFF1ae5be),
+                  elevation: 5,
+                ),
+                child: Text(
+                  _backgroundColor == Color.fromARGB(255, 255, 255, 255) ? 'Zmień kolor tła na ciemny' : 'Zmień kolor tła na jasny',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
