@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Color(0xFF1ae5be),
+                  primary: Color(0xFFf4c2c2),
                   elevation: 5,
                 ),
                 child: Text(
@@ -76,11 +76,11 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Color(0xFF1ae5be),
+                  primary: Color(0xFFf4c2c2),
                   elevation: 5,
                 ),
                 child: Text(
-                  'Ranking',
+                  'RANKING',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Color(0xFF1ae5be),
+                  primary: Color(0xFFf4c2c2),
                   elevation: 5,
                 ),
                 child: Text(
@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  primary: Color(0xFF1ae5be),
+                  primary: Color(0xFFf4c2c2),
                   elevation: 5,
                 ),
                 child: Text(

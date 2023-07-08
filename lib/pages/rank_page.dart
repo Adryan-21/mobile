@@ -23,12 +23,13 @@ class _RankingPageState extends State<RankingPage> {
     players.clear();
     for (var i = 0; i < 10; i++) {
       final playerName = faker.person.name();
-      final playerScore = faker.randomGenerator.integer(100);
+      final playerScore = faker.randomGenerator.integer(21); // Losowy wynik od 0 do 20
       players.add(Player(name: playerName, score: playerScore));
     }
     players.sort((a, b) => b.score.compareTo(a.score)); // Sortowanie graczy w kolejności malejącej według wyników
   }
 
+    // Tworzy tabelę z danymi graczy
   Widget _buildTable() {
     return DataTable(
       columns: [
@@ -40,21 +41,22 @@ class _RankingPageState extends State<RankingPage> {
         players.length,
         (index) => DataRow(
           cells: [
-            DataCell(Text((index + 1).toString())),
-            DataCell(Text(players[index].name)),
-            DataCell(Text(players[index].score.toString())),
+            DataCell(Text((index + 1).toString())), // Komórka z numerem miejsca gracza
+            DataCell(Text(players[index].name)), // Komórka z nazwą gracza
+            DataCell(Text(players[index].score.toString())), // Komórka z wynikiem gracza
           ],
         ),
       ),
     );
   }
 
+    // Tworzy siatkę z danymi graczy
   Widget _buildGrid() {
     return GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10.0,
-        crossAxisSpacing: 10.0,
+        crossAxisCount: 2, // Liczba kolumn siatki
+        mainAxisSpacing: 10.0, // Odstęp pionowy między elementami
+        crossAxisSpacing: 10.0, // Odstęp poziomy między elementami
       ),
       itemCount: players.length,
       itemBuilder: (context, index) {
@@ -81,6 +83,7 @@ class _RankingPageState extends State<RankingPage> {
     });
   }
 
+    //budowanie struktury rankingu
   @override
   Widget build(BuildContext context) {
     return Scaffold(

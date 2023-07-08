@@ -196,7 +196,7 @@ class _GamePageState extends State<GamePage>
         child: Container(
           margin: EdgeInsets.all(5),
           decoration: BoxDecoration(
-            color: itemVisibility[index] ? Color(0xFF1AE5BE) : Colors.grey[300],
+            color: itemVisibility[index] ? Color(0xFF89cff0 ) : Colors.grey[300],
             borderRadius: BorderRadius.circular(10),
           ),
           child: Center(
